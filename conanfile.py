@@ -12,14 +12,8 @@ class FoxiConan(ConanFile):
     url = "https://github.com/conan-io/conan-center-index"
 
     settings = "os", "arch", "compiler", "build_type"
-    options = {
-        "shared": [True, False],
-        "fPIC": [True, False],
-    }
-    default_options = {
-        "shared": False,
-        "fPIC": True,
-    }
+    options = {"fPIC": [True, False]}
+    default_options = {"fPIC": True}
 
     exports_sources = ["CMakeLists.txt", "patches/**"]
     generators = "cmake"
@@ -34,8 +28,6 @@ class FoxiConan(ConanFile):
             del self.options.fPIC
 
     def configure(self):
-        if self.options.shared:
-            del self.options.fPIC
         del self.settings.compiler.libcxx
         del self.settings.compiler.cppstd
 
