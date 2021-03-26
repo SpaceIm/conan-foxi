@@ -1,6 +1,7 @@
 from conans import ConanFile, CMake, tools
 import glob
 import os
+import shutil
 
 
 class FoxiConan(ConanFile):
@@ -63,6 +64,9 @@ class FoxiConan(ConanFile):
         self.copy("LICENSE", dst="licenses", src=self._source_subfolder)
         cmake = self._configure_cmake()
         cmake.install()
+        # Move plugin to bin folder on Windows
+        for dll_file in glob.glob(os.path.join(self.package_folder, "lib", "*.dll")):
+            shutil.move(dll_file, os.path.join(self.package_folder, "bin", os.path.basename(dll_file)))
 
     def package_info(self):
         self.cpp_info.libs = ["foxi_dummy", "foxi_loader"]
